@@ -4,24 +4,35 @@ import { MdOutlineDriveFileRenameOutline } from "react-icons/md";
 import { MdAttachEmail } from "react-icons/md";
 import { TbPassword } from "react-icons/tb";
 import { FaRepeat } from "react-icons/fa6";
+import {validatePassword} from "val-pass"
 
 const Register = () => {
-let [formdata,setformdata] = useState({
+const [formdata,setformdata] = useState({
   username:"",
   password:"",
   email:"",
   name:""
 })
 
-let handleChange=(e)=>{
+const[matched,setMatched]=useState(true)
+const {validateAll,getAllValidationErrorMessage}=validatePassword("password",8)
+
+const handleChange=(e)=>{
   let {name,value} =e.target
   setformdata({...formdata,[name]:value})
 
 }
-let handleSubmit=(e)=>{
+const handleSubmit=(e)=>{
   e.preventDefault()
   console.log(formdata);
   
+  
+}
+const handleRepeatPass=(e)=>{
+  const {value}=e.target
+  formdata.password!=value?setMatched(false):setMatched(true)
+  value==""&&setMatched(true)
+
 }
 
 
@@ -47,8 +58,8 @@ let handleSubmit=(e)=>{
         <input type="password" name='password' placeholder='Enter Password'  className='w-full outline-0 text-md px-5 font-bold p'onChange={handleChange}/>
         <span><TbPassword /></span>
       </div>
-      <div className='w-full  flex justify-center items-center h-10 '>
-        <input type="password" placeholder='Re-type your password'  className='w-full outline-0 text-md px-5 font-bold p'/>
+      <div className={`w-full border-2 flex justify-center items-center h-10 ${!matched? `border-red-700`: `border-black`} `}>
+        <input type="password" placeholder='Re-type your password'  className='w-full outline-0 text-md px-5 font-bold p' onChange={handleRepeatPass}/>
         <span><FaRepeat /></span>
       </div>
       <div className='w-full  flex justify-center items-center h-10 bg-black text-amber-50 '>
