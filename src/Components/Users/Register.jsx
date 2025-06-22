@@ -6,10 +6,13 @@ import { TbPassword } from "react-icons/tb";
 import { FaRepeat } from "react-icons/fa6";
 import { validatePassword } from "val-pass"
 import {toast} from 'react-hot-toast'
+import empServices from '../../Services/empServices';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
+ const navigate= useNavigate()
   const [formdata, setformdata] = useState({
-    username: "",
+    userName: "",
     password: "",
     email: "",
     name: ""
@@ -35,8 +38,8 @@ const Register = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     
-    let {username,name,password,email}=formdata
-    if(!name||!username||!password||!email){
+    let {userName,name,password,email}=formdata
+    if(!name||!userName||!password||!email){
       toast.error("check all fields")
       return
     }
@@ -50,9 +53,28 @@ const Register = () => {
       return
 
     }
+    (async()=>{
+      let something=await empServices.user(formdata)
+    try {
+    
+
+      if(something.status==201){
+        toast.success("Registered Successfully")
+        navigate("/Login")
+     }else{
+        toast.error("Something went Wrong")
+     }
+      
+    } catch (error) {
+      console.log(error);
+      
+      
+    }
+    })()
     
     
-    console.log(formdata);
+   
+
   }
   const handleRepeatPass = (e) => {
     const { value } = e.target
@@ -65,7 +87,7 @@ const Register = () => {
 
   return (
     <div className='bg-[#efef] w-full h-full flex items-center justify-center'>
-      <form action="" className='w-1/2 h-[80%] flex items-center flex-col gap-2 bg-white py-10 rounded-2xl px-10 max-sm:w-[90%] overflow-scroll  ' onSubmit={handleSubmit} >
+      <form action="" className='w-1/2 h-[70%] flex items-center flex-col gap-2 bg-white py-10 rounded-2xl px-10 max-sm:w-[90%] overflow-scroll  ' onSubmit={handleSubmit} >
         <div className='w-full  flex justify-center items-center h-10 '>
           <h1 className='text-2xl font-bold max-sm:text-sm'>Register Form</h1>
         </div>
@@ -74,7 +96,7 @@ const Register = () => {
           <span><CgNametag /></span>
         </div>
         <div className='w-full flex justify-center items-center h-10 border-[2px] px-[10px]'>
-          <input type="text" name='username' placeholder='Enter Username' className='w-full outline-0 text-md px-5 font-bold ' onChange={handleChange} />
+          <input type="text" name='userName' placeholder='Enter userName' className='w-full outline-0 text-md px-5 font-bold ' onChange={handleChange} />
           <span><MdOutlineDriveFileRenameOutline /></span>
         </div>
         <div className='w-full flex justify-center items-center h-10  border-[2px] px-[10px]'>
