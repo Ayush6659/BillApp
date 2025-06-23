@@ -3,6 +3,7 @@ import { MdAttachEmail } from "react-icons/md";
 import { TbPassword } from "react-icons/tb";
 import {toast} from 'react-hot-toast'
 import empServices from '../../Services/empServices';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
   const [formdata, setformdata] = useState({
@@ -29,8 +30,8 @@ const Login = () => {
     
 
       if(something.status==200){
-        toast.success("Registered Successfully")
-        navigate("/Login")
+        toast.success("logged in  Successfully")
+        navigate("/home")
         // console.log(formdata);
      }else{
         toast.error(`${something.response.data.message}`)
@@ -68,6 +69,7 @@ const Login = () => {
         <div className='w-full  flex justify-center items-center h-10 bg-black text-amber-50 '>
           <button className='font-bold tracking-widest w-full h-full hover:bg-blue-300'>click</button>
         </div>
+      <div className='hover:underline'>Click here to<Link to="register"> Register</Link></div>
       </form>
     </div>
   )
