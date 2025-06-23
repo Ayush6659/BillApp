@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { MdAttachEmail } from "react-icons/md";
 import { TbPassword } from "react-icons/tb";
 import {toast} from 'react-hot-toast'
+import empServices from '../../Services/empServices';
 
 const Login = () => {
   const [formdata, setformdata] = useState({
@@ -22,8 +23,26 @@ const Login = () => {
       toast.error("check all fields")
       return
     }
+     (async()=>{
+      let something=await empServices.loginUser(formdata)
+    try {
     
-    console.log(formdata);
+
+      if(something.status==200){
+        toast.success("Registered Successfully")
+        navigate("/Login")
+        // console.log(formdata);
+     }else{
+        toast.error(`${something.response.data.message}`)
+     }
+      
+    } catch (error) {
+      console.log(error);
+      
+      
+    }
+    })()
+    
     
     
     
