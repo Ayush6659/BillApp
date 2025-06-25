@@ -2,6 +2,11 @@ import { createBrowserRouter } from "react-router-dom";
 import Register from "../Components/Users/Register";
 import Login from "../Components/Users/Login";
 import Main from "../Components/main/Main";
+import { Children } from "react";
+import About from "../Components/main/About/About";
+import AddBills from "../Components/main/AddBills/AddBills";
+import Home from "../Components/main/Home/Home";
+import FilterBills from "../Components/main/Filterbills/FilterBills";
 
 
 let routes = createBrowserRouter(
@@ -17,7 +22,28 @@ let routes = createBrowserRouter(
         },
         {
             path:"/home",
-            element:<Main></Main>
+            element:<Main></Main>,
+            children:[
+                {
+                    index:true,
+                    element:<Home></Home>
+                },
+                {
+                    path:"about",
+                    element:<About></About>
+                },
+                {
+                    path:"AddBills",
+                    element:<AddBills></AddBills>
+                },
+                {
+                    path:"FilterBills",
+                    element:<FilterBills></FilterBills>
+                }
+               
+            ]
+            
+        
         }
     ])
     export default routes
