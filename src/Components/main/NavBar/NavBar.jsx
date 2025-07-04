@@ -10,7 +10,7 @@ const handleShow=()=>{
   // console.log(show);
 }
   return (
-     <div className={`w-full h-[80px] bg-black text-amber-50 flex justify-around items-center text-xl max-sm:justify-start max-sm:px-8 ${show?'h-[210px] flex flex-col justify-around gap-2.5 items-start py-2.5 text-white':""} sm:flex-row sm:h-[80px] sm:justify-around sm:items-center`}>
+     <div className={`w-full h-[80px] bg-black text-amber-50 flex justify-around items-center text-xl max-sm:justify-start max-[639px]:px-8 ${show?'h-[210px] flex flex-col justify-around gap-2.5 items-start py-2.5 text-white':""} sm:flex-row sm:h-[80px] sm:justify-around sm:items-center`}>
 
 
       <div className='hidden text-white max-sm:flex'>
@@ -19,17 +19,17 @@ const handleShow=()=>{
        }
       </div>
       <div className={`max-sm:hidden${show?'block':""}`}>
-      <NavLink className={({isActive})=>isActive?"bg-amber-50 text-black":""
+      <NavLink className={({isActive})=>isActive?"bg-amber-50 p-2 rounded text-black":""
         }end to={"/home"}>Home</NavLink> 
       </div>
       <div  className={`max-sm:hidden${show?'block':""}`}>
-      <NavLink className={({isActive})=>isActive?"bg-amber-50 text-black":""} end to={"addBills"}>AddBills</NavLink></div>
+      <NavLink className={({isActive})=>isActive?"bg-amber-50 p-2 rounded text-black":""} end to={"addBills"}>AddBills</NavLink></div>
 
       <div  className={`max-sm:hidden${show?'block':""}`}>
-      <NavLink end to={"filterBills"}>FilterBills</NavLink> 
+      <NavLink className={({isActive})=>isActive?"bg-amber-50 p-2 rounded text-black":""} end to={"filterBills"}>FilterBills</NavLink> 
       </div>
       <div  className={`max-sm:hidden${show?'block':""}`}>
-       <NavLink end to={"about"}> About</NavLink></div>
+       <NavLink className={({isActive})=>isActive?"bg-amber-50 p-2 rounded text-black":""} end to={"about"}> About</NavLink></div>
     </div>
   )
 }
