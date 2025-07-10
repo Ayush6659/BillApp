@@ -1,11 +1,12 @@
 import {createRoot} from "react-dom/client";
 import App from "./App";
 import { Toaster } from "react-hot-toast";
+import Context from "./Components/context/Context";
 
 
 
 createRoot(document.getElementById("root")).render(<>
-<App></App>
+<Context><App></App></Context>
 <Toaster></Toaster>
 
 

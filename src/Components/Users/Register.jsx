@@ -46,7 +46,7 @@ const Register = () => {
     let {validateAll,getAllValidationErrorMessage}=validatePassword(password)
     if(!validateAll){
       toast.error(`${getAllValidationErrorMessage()}`)
-      return
+      
     }
     if(!matched){
       toast.error("password did not match")
@@ -54,13 +54,13 @@ const Register = () => {
 
     }
     (async()=>{
-      let something=await empServices.user(formdata)
+      let something=await empServices.regisUser(formdata)
     try {
     
 
       if(something.status==201){
         toast.success("Registered Successfully")
-        navigate("/Login")
+        navigate("/")
      }else{
         toast.error("Something went Wrong")
      }

@@ -1,16 +1,21 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { MdAttachEmail } from "react-icons/md";
 import { TbPassword } from "react-icons/tb";
 import {toast} from 'react-hot-toast'
 import empServices from '../../Services/empServices';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { contextApi } from '../context/Context';
 
 const Login = () => {
+ const {globalState,setGlobalState} =useContext(contextApi)
+//  console.log(globalState);
+ 
   const [formdata, setformdata] = useState({
       email: "",
       password: ""
      
     })
+    const navigate=useNavigate()
   const handleChange = (e) => {
       let { name, value } = e.target
       setformdata({ ...formdata, [name]: value })
@@ -25,20 +30,21 @@ const Login = () => {
       return
     }
      (async()=>{
-      let something=await empServices.loginUser(formdata)
+      let data=await empServices.loginUser(formdata)
     try {
     
 
-      if(something.status==200){
-        toast.success("logged in  Successfully")
+      if(data.status==200){
+        toast.success("loggedin  Successfully")
+        setGlobalState((preval)=>({...preval,token:data.data.token}))
         navigate("/home")
         // console.log(formdata);
      }else{
-        toast.error(`${something.response.data.message}`)
+        toast.error(`${data.response.data.message}`)
      }
       
     } catch (error) {
-      console.log(error);
+     toast.error("something went Wrong")
       
       
     }

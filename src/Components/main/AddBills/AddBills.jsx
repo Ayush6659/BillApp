@@ -1,11 +1,16 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import AddItems from '../AddItems/AddItems'
+import empServices from '../../../Services/empServices'
+import { data, useNavigate } from 'react-router-dom'
+import toast from 'react-hot-toast'
+import { contextApi } from '../../context/Context'
 
 const AddBills = () => {
+ const navigate= useNavigate()
   let [Bill, setBill] = useState({
     companyName: "",
     PoNo: "",
-    invoiceDate: "",
+    invoiceDate: new Date().toISOString().split("T")[0],
     workCompletionDate: "",
     address: "",
     PAN: "",
@@ -13,6 +18,8 @@ const AddBills = () => {
     clientBankName: ""
   })
   const [items, setItems] = useState([])
+  const {globalState} = useContext(contextApi)
+  
   let handleChange = (e) => {
     let { name, value } = e.target
     setBill({ ...Bill, [name]: value })
@@ -20,35 +27,71 @@ const AddBills = () => {
   }
   let handleSubmit = (e) => {
     e.preventDefault()
-    console.log(Bill);
-    console.log(items);
-    let {companyName,PoNo,invoiceDate,workCompletionDate,address,PAN,GSTNo,clientBankName} =Bill
-   let totalAmount= items.reduce((acc,val)=>{
-      const base=parseInt(val.amount)
-      const cgst=base*parseInt(val.cgstPercent)/100
-      const sgst=base*parseInt(val.sgstPercent)/100
-      // console.log(base,cgst,sgst);
-      return acc+base+cgst+sgst
-      
-    },0)
-    let payload={
+    // console.log(Bill);
+    // console.log(items);
+    let { companyName, PoNo, invoiceDate, workCompletionDate, address, PAN, GSTNo, clientBankName } = Bill
+    let totalAmount = items.reduce((acc, val) => {
+      const base = parseInt(val.amount)
+      // console.lo);
+
+      const cgst = base * Number(val.cgstPercent) / 100
+      const sgst = base * Number(val.sgstPercent) / 100
+      console.log(base,cgst,sgst);
+      console.log(val);
+
+      return acc + base + cgst + sgst
+
+    }, 0)
+    console.log(totalAmount);
+
+    let payload = {
       companyName,
       workCompletionDate,
-      
+      PoNo,
+      address,
+      PAN,
+      GSTNo,
+      clientBankName,
+      items,
+      invoiceDate: new Date().toISOString().split("T")[0],
+      totalAmount
+
+
 
     }
-    
-    
-    
+    console.log(payload);
+    (async()=>{
+      try {
+      let data=await empServices.addBills(payload,globalState.token);
+      console.log(globalState);
+      
+        // console.log(data);
+        
+        if(data.status==201){
+          toast.success("Bills added Succesfully")
+          navigate("/home")
+        }else{
+          toast.error("Something went wrong")
+        }
+      } catch (error) {
+         toast.error("Something went Wrong") 
+        
+        
+        
+      }
+    })()
+
+
+
   }
   const handleClick = (e) => {
     let newObj = {
       id: Date.now(),
       description: "",
-      quantity:"",
-      rate:"",
-      cgstPercent:"",
-      sgstPercent:"",
+      quantity: "",
+      rate: "",
+      cgstPercent: "",
+      sgstPercent: "",
     }
     setItems((preval) => ([...preval, newObj]))
   }
@@ -57,20 +100,26 @@ const AddBills = () => {
   }
   const updateItems = (id, name, value) => {
     setItems((preval) => {
-      return preval.map((val) =>{
-        const updateItems = {
-          ...val, [name]: value
+      return preval.map((val) => {
+        if (val.id == id) {
+          const updateItems = {
+            ...val, [name]: value
+          }
+          updateItems.amount = Number(val.rate)*Number(val.quantity)             
+        // console.log(updateItems);
+        
+        //   console.log(updateItems);
+          
+          return updateItems
+         
         }
-        return updateItems
-        
-        
+        return val
       })
-     return val
-      
+
     })
 
   }
-  
+
 
   return (
     <div className='bg-[#efef] w-full h-full flex items-center justify-center'>
@@ -91,7 +140,7 @@ const AddBills = () => {
         </div> */}
         <div className='w-full flex justify-center items-center h-10  border-[2px] px-[10px]'>
           <input type="date" name="workCompletionDate" placeholder='Enter Your workCompletionDate' className='w-full outline-0 text-md px-5 font-bold ' onChange={handleChange}
-          max={new Date().toISOString().split("T")[0]} />
+            max={new Date().toISOString().split("T")[0]} />
 
         </div>
         <div className='w-full flex justify-center items-center h-10  border-[2px] px-[10px]'>
